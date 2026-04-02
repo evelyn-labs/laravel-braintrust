@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace EvelynLabs\Braintrust\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class BraintrustCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-braintrust';
 
     public $description = 'My command';
 
