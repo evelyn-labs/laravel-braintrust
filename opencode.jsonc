@@ -1,0 +1,9 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "braintrust": {
+      "type": "remote",
+      "url": "https://api.braintrust.dev/mcp",
+    }
+  }
+}
