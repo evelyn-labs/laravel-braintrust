@@ -65,9 +65,9 @@ class Experiment
     /**
      * Run the experiment on a dataset.
      *
-     * @param iterable<int, array<string, mixed>> $dataset The dataset rows with 'input' and 'expected' keys
-     * @param callable $task The task callable that takes input and returns output
-     * @param array<int, ScoreContract> $scorers Array of scorer instances
+     * @param  iterable<int, array<string, mixed>>  $dataset  The dataset rows with 'input' and 'expected' keys
+     * @param  callable  $task  The task callable that takes input and returns output
+     * @param  array<int, ScoreContract>  $scorers  Array of scorer instances
      * @return array<string, mixed> Results with 'spans' and 'aggregates'
      */
     public function run(iterable $dataset, callable $task, array $scorers): array

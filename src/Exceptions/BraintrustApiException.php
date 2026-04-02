@@ -21,9 +21,9 @@ class BraintrustApiException extends Exception
     /**
      * Create a new Braintrust API exception.
      *
-     * @param string $message The error message
-     * @param int $statusCode The HTTP status code
-     * @param array<string, mixed> $responseBody The response body from the API
+     * @param  string  $message  The error message
+     * @param  int  $statusCode  The HTTP status code
+     * @param  array<string, mixed>  $responseBody  The response body from the API
      */
     public function __construct(string $message, int $statusCode, array $responseBody = [])
     {

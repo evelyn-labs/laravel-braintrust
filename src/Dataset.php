@@ -40,7 +40,7 @@ class Dataset
     /**
      * Insert rows into the dataset.
      *
-     * @param array<int, array<string, mixed>> $rows
+     * @param  array<int, array<string, mixed>>  $rows
      */
     public function insert(array $rows): void
     {

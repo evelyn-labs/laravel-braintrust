@@ -2,10 +2,10 @@
 
 namespace EvelynLabs\Braintrust;
 
-use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
 use EvelynLabs\Braintrust\Console\EvalCommand;
 use EvelynLabs\Braintrust\Http\BraintrustClient;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class BraintrustServiceProvider extends PackageServiceProvider
 {

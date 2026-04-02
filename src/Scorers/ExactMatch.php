@@ -17,9 +17,9 @@ class ExactMatch implements ScoreContract
      *
      * Returns 1.0 if output exactly matches expected (using ===), 0.0 otherwise.
      *
-     * @param mixed $input The input data (unused)
-     * @param mixed $output The actual output
-     * @param mixed $expected The expected output
+     * @param  mixed  $input  The input data (unused)
+     * @param  mixed  $output  The actual output
+     * @param  mixed  $expected  The expected output
      * @return float 1.0 for exact match, 0.0 otherwise
      */
     public function score(mixed $input, mixed $output, mixed $expected): float

@@ -131,9 +131,6 @@ class EvalCommand extends Command
 
     /**
      * Truncate a string to a maximum length.
-     *
-     * @param string $string
-     * @param int $maxLength
      */
     protected function truncate(string $string, int $maxLength): string
     {
@@ -141,6 +138,6 @@ class EvalCommand extends Command
             return $string;
         }
 
-        return substr($string, 0, $maxLength - 3) . '...';
+        return substr($string, 0, $maxLength - 3).'...';
     }
 }

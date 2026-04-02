@@ -50,7 +50,7 @@ class Span
     /**
      * Create a new Span instance.
      *
-     * @param array<string, mixed> $attributes
+     * @param  array<string, mixed>  $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -72,20 +72,21 @@ class Span
     {
 
         $data = [
-        'id' => $this->id,
-        'input' => $this->input,
-        'output' => $this->output,
-        'expected' => $this->expected,
-    ];
-    if (! empty($this->scores)) {
-        $data['scores'] = $this->scores;
-    }
-    if (! empty($this->metadata)) {
-        $data['metadata'] = $this->metadata;
-    }
-    if (! empty($this->metrics)) {
-        $data['metrics'] = $this->metrics;
-    }
+            'id' => $this->id,
+            'input' => $this->input,
+            'output' => $this->output,
+            'expected' => $this->expected,
+        ];
+        if (! empty($this->scores)) {
+            $data['scores'] = $this->scores;
+        }
+        if (! empty($this->metadata)) {
+            $data['metadata'] = $this->metadata;
+        }
+        if (! empty($this->metrics)) {
+            $data['metrics'] = $this->metrics;
+        }
+
         return $data;
     }
 }

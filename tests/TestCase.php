@@ -2,9 +2,9 @@
 
 namespace EvelynLabs\Braintrust\Tests;
 
+use EvelynLabs\Braintrust\BraintrustServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use EvelynLabs\Braintrust\BraintrustServiceProvider;
 
 class TestCase extends Orchestra
 {

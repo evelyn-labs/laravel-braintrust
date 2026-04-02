@@ -21,7 +21,7 @@ class BraintrustManager
     /**
      * Create a new Braintrust manager instance.
      *
-     * @param array<string, mixed> $config
+     * @param  array<string, mixed>  $config
      */
     public function __construct(BraintrustClient $client, array $config)
     {

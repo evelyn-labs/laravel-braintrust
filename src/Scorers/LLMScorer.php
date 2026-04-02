@@ -24,9 +24,9 @@ class LLMScorer implements ScoreContract
     /**
      * Create a new LLM scorer instance.
      *
-     * @param callable $llmCallable The callable to invoke the LLM (string prompt -> string response)
-     * @param string $rubricPrompt The rubric prompt with {input}, {output}, {expected} placeholders
-     * @param string|null $name Optional custom name for the scorer
+     * @param  callable  $llmCallable  The callable to invoke the LLM (string prompt -> string response)
+     * @param  string  $rubricPrompt  The rubric prompt with {input}, {output}, {expected} placeholders
+     * @param  string|null  $name  Optional custom name for the scorer
      */
     public function __construct(callable $llmCallable, string $rubricPrompt, ?string $name = null)
     {
@@ -46,9 +46,9 @@ class LLMScorer implements ScoreContract
     /**
      * Calculate the score using an LLM to evaluate the output.
      *
-     * @param mixed $input The input data
-     * @param mixed $output The actual output
-     * @param mixed $expected The expected output
+     * @param  mixed  $input  The input data
+     * @param  mixed  $output  The actual output
+     * @param  mixed  $expected  The expected output
      * @return float The normalized score between 0.0 and 1.0
      */
     public function score(mixed $input, mixed $output, mixed $expected): float
@@ -62,10 +62,6 @@ class LLMScorer implements ScoreContract
 
     /**
      * Format the prompt by replacing placeholders.
-     *
-     * @param mixed $input
-     * @param mixed $output
-     * @param mixed $expected
      */
     protected function formatPrompt(mixed $input, mixed $output, mixed $expected): string
     {
@@ -84,8 +80,6 @@ class LLMScorer implements ScoreContract
 
     /**
      * Convert a value to a string representation.
-     *
-     * @param mixed $value
      */
     protected function stringify(mixed $value): string
     {
@@ -112,8 +106,6 @@ class LLMScorer implements ScoreContract
      * Parse the score from the LLM response.
      *
      * Handles responses like "0.85", "Score: 0.85", "The score is 0.85", etc.
-     *
-     * @param string $response
      */
     protected function parseScore(string $response): float
     {

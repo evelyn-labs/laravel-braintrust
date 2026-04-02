@@ -17,7 +17,7 @@ class BraintrustClient
     /**
      * Create a new Braintrust client instance.
      *
-     * @param array<string, mixed> $config
+     * @param  array<string, mixed>  $config
      */
     public function __construct(array $config)
     {
@@ -27,9 +27,10 @@ class BraintrustClient
     /**
      * Make a GET request to the Braintrust API.
      *
-     * @param string $path The API endpoint path
-     * @param array<string, mixed> $query Query parameters
+     * @param  string  $path  The API endpoint path
+     * @param  array<string, mixed>  $query  Query parameters
      * @return array<string, mixed> The response data
+     *
      * @throws BraintrustApiException
      */
     public function get(string $path, array $query = []): array
@@ -55,9 +56,10 @@ class BraintrustClient
     /**
      * Make a POST request to the Braintrust API.
      *
-     * @param string $path The API endpoint path
-     * @param array<string, mixed> $data The request body data
+     * @param  string  $path  The API endpoint path
+     * @param  array<string, mixed>  $data  The request body data
      * @return array<string, mixed> The response data
+     *
      * @throws BraintrustApiException
      */
     public function post(string $path, array $data = []): array
