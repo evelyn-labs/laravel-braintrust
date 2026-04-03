@@ -4,7 +4,10 @@
     "keywords": [
         "Evelyn Labs",
         "laravel",
-        "laravel-braintrust"
+        "laravel-braintrust",
+        "AI Agents",
+        "AI Evals",
+        "Brainturst"
     ],
     "homepage": "https://github.com/evelyn-labs/laravel-braintrust",
     "license": "MIT",
@@ -72,3 +75,4 @@
     "minimum-stability": "dev",
     "prefer-stable": true
 }
+
