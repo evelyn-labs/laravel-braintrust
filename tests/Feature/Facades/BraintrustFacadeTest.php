@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Http;
 use EvelynLabs\Braintrust\Facades\Braintrust;
+use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
     Http::preventStrayRequests();
@@ -21,6 +21,7 @@ it('creates experiment with correct name via facade', function () {
     Http::fake([
         'https://api.braintrust.dev/v1/experiment' => function ($request) use (&$capturedBody) {
             $capturedBody = $request->data();
+
             return Http::response(['id' => 'exp-123'], 201);
         },
     ]);
@@ -37,6 +38,7 @@ it('passes project from config to experiment via facade', function () {
     Http::fake([
         'https://api.braintrust.dev/v1/experiment' => function ($request) use (&$capturedBody) {
             $capturedBody = $request->data();
+
             return Http::response(['id' => 'exp-123'], 201);
         },
     ]);
@@ -53,6 +55,7 @@ it('creates dataset with correct id via facade', function () {
     Http::fake([
         '*' => function ($request) use (&$capturedUrl) {
             $capturedUrl = $request->url();
+
             return Http::response(['rows' => []], 200);
         },
     ]);

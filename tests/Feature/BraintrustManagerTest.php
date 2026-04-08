@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Http;
 use EvelynLabs\Braintrust\BraintrustManager;
 use EvelynLabs\Braintrust\Http\BraintrustClient;
+use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
     Http::preventStrayRequests();
@@ -64,6 +64,7 @@ it('passes dataset id correctly', function () {
     Http::fake([
         '*' => function ($request) use (&$capturedUrl) {
             $capturedUrl = $request->url();
+
             return Http::response(['rows' => []], 200);
         },
     ]);

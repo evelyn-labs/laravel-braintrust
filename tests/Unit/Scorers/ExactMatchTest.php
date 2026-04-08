@@ -3,61 +3,61 @@
 use EvelynLabs\Braintrust\Scorers\ExactMatch;
 
 it('returns correct name', function () {
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
     expect($scorer->name())->toBe('exact_match');
 });
 
 it('returns 1 for exact string match', function () {
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
     $result = $scorer->score('some input', 'hello world', 'hello world');
     expect($result)->toBe(1.0);
 });
 
 it('returns 0 for string mismatch', function () {
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
     $result = $scorer->score('some input', 'hello world', 'goodbye world');
     expect($result)->toBe(0.0);
 });
 
 it('returns 1 for exact integer match', function () {
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
     $result = $scorer->score('some input', 42, 42);
     expect($result)->toBe(1.0);
 });
 
 it('returns 0 for type mismatch', function () {
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
     $result = $scorer->score('some input', '42', 42);
     expect($result)->toBe(0.0);
 });
 
 it('returns 1 for exact array match', function () {
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
     $array = ['key' => 'value', 'list' => [1, 2, 3]];
     $result = $scorer->score('some input', $array, $array);
     expect($result)->toBe(1.0);
 });
 
 it('returns 1 for null match', function () {
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
     $result = $scorer->score('some input', null, null);
     expect($result)->toBe(1.0);
 });
 
 it('returns 1 for boolean true match', function () {
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
     $result = $scorer->score('some input', true, true);
     expect($result)->toBe(1.0);
 });
 
 it('returns 0 for boolean mismatch', function () {
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
     $result = $scorer->score('some input', true, false);
     expect($result)->toBe(0.0);
 });
 
 it('ignores input parameter', function () {
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
 
     // The input parameter should not affect the score
     $result1 = $scorer->score('input A', 'output', 'output');

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Http;
-use EvelynLabs\Braintrust\Http\BraintrustClient;
 use EvelynLabs\Braintrust\Exceptions\BraintrustApiException;
+use EvelynLabs\Braintrust\Http\BraintrustClient;
+use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
     Http::preventStrayRequests();

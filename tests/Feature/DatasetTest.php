@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Http;
-use EvelynLabs\Braintrust\Http\BraintrustClient;
 use EvelynLabs\Braintrust\Dataset;
+use EvelynLabs\Braintrust\Http\BraintrustClient;
+use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
     Http::preventStrayRequests();
@@ -18,7 +18,7 @@ it('fetches rows from api', function () {
             'rows' => [
                 ['input' => 'test', 'expected' => 'result'],
                 ['input' => 'another', 'expected' => 'output'],
-            ]
+            ],
         ], 200),
     ]);
 
@@ -35,7 +35,7 @@ it('fetches rows from api', function () {
 it('returns empty array when no rows', function () {
     Http::fake([
         'https://api.braintrust.dev/v1/dataset/empty-dataset/fetch' => Http::response([
-            'rows' => []
+            'rows' => [],
         ], 200),
     ]);
 
@@ -54,8 +54,9 @@ it('passes dataset id to api path', function () {
     Http::fake([
         '*' => function ($request) use (&$capturedUrl) {
             $capturedUrl = $request->url();
+
             return Http::response(['rows' => []], 200);
-        }
+        },
     ]);
 
     $client = new BraintrustClient(['api_key' => 'test', 'base_url' => 'https://api.braintrust.dev']);
@@ -76,8 +77,9 @@ it('inserts rows via api', function () {
     Http::fake([
         'https://api.braintrust.dev/v1/dataset/test-dataset/insert' => function ($request) use (&$capturedBody) {
             $capturedBody = $request->data();
+
             return Http::response([], 200);
-        }
+        },
     ]);
 
     $client = new BraintrustClient(['api_key' => 'test', 'base_url' => 'https://api.braintrust.dev']);
@@ -91,7 +93,7 @@ it('inserts rows via api', function () {
     $dataset->insert($rows);
 
     expect($capturedBody)->toBe([
-        'rows' => $rows
+        'rows' => $rows,
     ]);
 });
 
@@ -103,8 +105,9 @@ it('handles empty rows insert', function () {
         'https://api.braintrust.dev/v1/dataset/test-dataset/insert' => function ($request) use (&$apiCalled, &$capturedBody) {
             $apiCalled = true;
             $capturedBody = $request->data();
+
             return Http::response([], 200);
-        }
+        },
     ]);
 
     $client = new BraintrustClient(['api_key' => 'test', 'base_url' => 'https://api.braintrust.dev']);
@@ -122,8 +125,9 @@ it('includes correct dataset id in insert url', function () {
     Http::fake([
         '*' => function ($request) use (&$capturedUrl) {
             $capturedUrl = $request->url();
+
             return Http::response([], 200);
-        }
+        },
     ]);
 
     $client = new BraintrustClient(['api_key' => 'test', 'base_url' => 'https://api.braintrust.dev']);
@@ -153,7 +157,7 @@ it('makes post request with json content type', function () {
 it('sends authorization header on fetch', function () {
     Http::fake([
         'https://api.braintrust.dev/v1/dataset/test-dataset/fetch' => Http::response([
-            'rows' => []
+            'rows' => [],
         ], 200),
     ]);
 

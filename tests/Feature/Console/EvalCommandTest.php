@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Http;
-use EvelynLabs\Braintrust\Scorers\ExactMatch;
 
 // =============================================================================
 // Setup
@@ -15,7 +14,7 @@ beforeEach(function () {
 
 afterEach(function () {
     // Cleanup any temp files that might have been left behind
-    $tempFiles = glob(sys_get_temp_dir() . '/eval-test-*.php');
+    $tempFiles = glob(sys_get_temp_dir().'/eval-test-*.php');
     foreach ($tempFiles as $file) {
         if (file_exists($file)) {
             unlink($file);
@@ -26,26 +25,27 @@ afterEach(function () {
 // Helper function to create temp config files for validation tests (no closures)
 function createValidationTestConfig(array $data): string
 {
-    $tempFile = sys_get_temp_dir() . '/eval-test-' . uniqid() . '.php';
+    $tempFile = sys_get_temp_dir().'/eval-test-'.uniqid().'.php';
 
     $phpCode = "<?php\n\nreturn [\n";
     foreach ($data as $key => $value) {
         if (is_string($value)) {
-            $phpCode .= "    '{$key}' => '" . addslashes($value) . "',\n";
+            $phpCode .= "    '{$key}' => '".addslashes($value)."',\n";
         } elseif (is_array($value)) {
-            $phpCode .= "    '{$key}' => " . var_export($value, true) . ",\n";
+            $phpCode .= "    '{$key}' => ".var_export($value, true).",\n";
         }
     }
-    $phpCode .= "];";
+    $phpCode .= '];';
 
     file_put_contents($tempFile, $phpCode);
+
     return $tempFile;
 }
 
 // Helper function to create temp config with closures for success tests
 function createRunnableConfig(string $experimentName, array $dataset): string
 {
-    $tempFile = sys_get_temp_dir() . '/eval-test-' . uniqid() . '.php';
+    $tempFile = sys_get_temp_dir().'/eval-test-'.uniqid().'.php';
 
     $phpCode = <<<'PHP'
 <?php
@@ -64,6 +64,7 @@ PHP;
 
     $phpCode = sprintf($phpCode, $experimentName, var_export($dataset, true));
     file_put_contents($tempFile, $phpCode);
+
     return $tempFile;
 }
 

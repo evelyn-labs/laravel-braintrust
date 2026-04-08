@@ -3,7 +3,7 @@
 use EvelynLabs\Braintrust\Span;
 
 it('generates uuid when id not provided', function () {
-    $span = new Span();
+    $span = new Span;
     expect($span->id)->toBeString()->not->toBeEmpty();
     // Should be a valid UUID format
     expect($span->id)->toMatch('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i');

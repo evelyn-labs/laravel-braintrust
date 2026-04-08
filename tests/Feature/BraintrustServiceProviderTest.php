@@ -56,14 +56,14 @@ it('merges default config', function () {
 
 it('registers braintrust service provider', function () {
     $provider = app()->getProvider(BraintrustServiceProvider::class);
-    
+
     expect($provider)->toBeInstanceOf(BraintrustServiceProvider::class);
 });
 
 it('registers braintrust client as singleton', function () {
     $client1 = app(BraintrustClient::class);
     $client2 = app(BraintrustClient::class);
-    
+
     expect($client1)->toBe($client2)
         ->and($client1)->toBeInstanceOf(BraintrustClient::class);
 });
@@ -71,19 +71,19 @@ it('registers braintrust client as singleton', function () {
 it('registers braintrust manager as singleton', function () {
     $manager1 = app(BraintrustManager::class);
     $manager2 = app(BraintrustManager::class);
-    
+
     expect($manager1)->toBe($manager2)
         ->and($manager1)->toBeInstanceOf(BraintrustManager::class);
 });
 
 it('manager receives client instance', function () {
     $manager = app(BraintrustManager::class);
-    
+
     $reflection = new ReflectionClass($manager);
     $clientProperty = $reflection->getProperty('client');
     $clientProperty->setAccessible(true);
     $client = $clientProperty->getValue($manager);
-    
+
     expect($client)->toBeInstanceOf(BraintrustClient::class);
 });
 
@@ -93,7 +93,7 @@ it('manager receives client instance', function () {
 
 it('is discoverable by laravel package discovery', function () {
     $providers = app()->getLoadedProviders();
-    
+
     expect($providers)->toHaveKey(BraintrustServiceProvider::class)
         ->and($providers[BraintrustServiceProvider::class] ?? false)->toBeTrue();
 });
@@ -129,25 +129,25 @@ it('eval command is available in artisan list', function () {
 
 it('requires api_key to be string or null', function () {
     config()->set('braintrust.api_key', 'valid-key');
-    
+
     $client = app(BraintrustClient::class);
     $reflection = new ReflectionClass($client);
     $configProperty = $reflection->getProperty('config');
     $configProperty->setAccessible(true);
     $config = $configProperty->getValue($client);
-    
+
     expect($config['api_key'])->toBeString();
 });
 
 it('requires base_url to be valid url', function () {
     config()->set('braintrust.base_url', 'https://custom.api.com');
-    
+
     $client = app(BraintrustClient::class);
     $reflection = new ReflectionClass($client);
     $configProperty = $reflection->getProperty('config');
     $configProperty->setAccessible(true);
     $config = $configProperty->getValue($client);
-    
+
     expect($config['base_url'])->toBeString()
         ->and($config['base_url'])->toStartWith('https://');
 });
@@ -155,13 +155,13 @@ it('requires base_url to be valid url', function () {
 it('applies default timeout when not specified', function () {
     // Reset timeout config
     config()->set('braintrust.timeout', null);
-    
+
     $client = app(BraintrustClient::class);
     $reflection = new ReflectionClass($client);
     $configProperty = $reflection->getProperty('config');
     $configProperty->setAccessible(true);
     $config = $configProperty->getValue($client);
-    
+
     expect($config['timeout'] ?? 30)->toBe(30);
 });
 
@@ -171,18 +171,18 @@ it('applies default timeout when not specified', function () {
 
 it('boots service provider successfully', function () {
     $provider = app()->getProvider(BraintrustServiceProvider::class);
-    
+
     expect($provider)->not->toBeNull();
 });
 
 it('handles config updates at runtime', function () {
     config()->set('braintrust.api_key', 'first-key');
     $client1 = app(BraintrustClient::class);
-    
+
     config()->set('braintrust.api_key', 'second-key');
     // Note: Since it's a singleton, the old instance is returned
     $client2 = app(BraintrustClient::class);
-    
+
     // Both should be the same instance (singleton behavior)
     expect($client1)->toBe($client2);
 });

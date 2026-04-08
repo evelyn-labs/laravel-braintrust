@@ -1,10 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Http;
-use EvelynLabs\Braintrust\Http\BraintrustClient;
 use EvelynLabs\Braintrust\Experiment;
+use EvelynLabs\Braintrust\Http\BraintrustClient;
 use EvelynLabs\Braintrust\Scorers\ExactMatch;
 use EvelynLabs\Braintrust\Scorers\ScoreContract;
+use EvelynLabs\Braintrust\Span;
+use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
     Http::preventStrayRequests();
@@ -17,7 +18,7 @@ beforeEach(function () {
 it('creates new experiment via api', function () {
     Http::fake([
         'https://api.braintrust.dev/v1/experiment' => Http::response([
-            'id' => 'exp-test-123'
+            'id' => 'exp-test-123',
         ], 201),
     ]);
 
@@ -35,8 +36,9 @@ it('includes project id when provided', function () {
     Http::fake([
         'https://api.braintrust.dev/v1/experiment' => function ($request) use (&$capturedBody) {
             $capturedBody = $request->data();
+
             return Http::response(['id' => 'exp-123'], 201);
-        }
+        },
     ]);
 
     $client = new BraintrustClient(['api_key' => 'test', 'base_url' => 'https://api.braintrust.dev']);
@@ -54,8 +56,9 @@ it('omits project id when null', function () {
     Http::fake([
         'https://api.braintrust.dev/v1/experiment' => function ($request) use (&$capturedBody) {
             $capturedBody = $request->data();
+
             return Http::response(['id' => 'exp-123'], 201);
-        }
+        },
     ]);
 
     $client = new BraintrustClient(['api_key' => 'test', 'base_url' => 'https://api.braintrust.dev']);
@@ -74,8 +77,9 @@ it('omits project id when empty string', function () {
     Http::fake([
         'https://api.braintrust.dev/v1/experiment' => function ($request) use (&$capturedBody) {
             $capturedBody = $request->data();
+
             return Http::response(['id' => 'exp-123'], 201);
-        }
+        },
     ]);
 
     $client = new BraintrustClient(['api_key' => 'test', 'base_url' => 'https://api.braintrust.dev']);
@@ -89,7 +93,7 @@ it('omits project id when empty string', function () {
 it('stores experiment id after creation', function () {
     Http::fake([
         'https://api.braintrust.dev/v1/experiment' => Http::response([
-            'id' => 'stored-exp-id'
+            'id' => 'stored-exp-id',
         ], 201),
     ]);
 
@@ -105,7 +109,7 @@ it('stores experiment id after creation', function () {
 it('returns experiment id', function () {
     Http::fake([
         'https://api.braintrust.dev/v1/experiment' => Http::response([
-            'id' => 'returned-id-456'
+            'id' => 'returned-id-456',
         ], 201),
     ]);
 
@@ -121,7 +125,7 @@ it('returns experiment id', function () {
 it('throws exception when no id returned', function () {
     Http::fake([
         'https://api.braintrust.dev/v1/experiment' => Http::response([
-            'message' => 'Created successfully'
+            'message' => 'Created successfully',
             // No 'id' key
         ], 201),
     ]);
@@ -130,7 +134,7 @@ it('throws exception when no id returned', function () {
     $experiment = new Experiment($client, 'my-experiment');
 
     $experiment->createOrResume();
-})->throws(\RuntimeException::class, 'Failed to create or resume experiment: no ID returned');
+})->throws(RuntimeException::class, 'Failed to create or resume experiment: no ID returned');
 
 // =============================================================================
 // Running Experiments Tests
@@ -145,7 +149,7 @@ it('runs experiment with dataset', function () {
     $client = new BraintrustClient(['api_key' => 'test', 'base_url' => 'https://api.braintrust.dev']);
     $experiment = new Experiment($client, 'test-exp');
 
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
 
     $results = $experiment->run(
         [['input' => 'hello', 'expected' => 'hello']],
@@ -169,7 +173,7 @@ it('calls task callable for each row', function () {
     $experiment = new Experiment($client, 'test-exp');
 
     $callCount = 0;
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
 
     $experiment->run(
         [
@@ -179,6 +183,7 @@ it('calls task callable for each row', function () {
         ],
         function ($input) use (&$callCount) {
             $callCount++;
+
             return $input;
         },
         [$scorer]
@@ -197,7 +202,7 @@ it('passes input to task callable', function () {
     $experiment = new Experiment($client, 'test-exp');
 
     $receivedInputs = [];
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
 
     $experiment->run(
         [
@@ -206,6 +211,7 @@ it('passes input to task callable', function () {
         ],
         function ($input) use (&$receivedInputs) {
             $receivedInputs[] = $input;
+
             return $input;
         },
         [$scorer]
@@ -224,12 +230,13 @@ it('passes null input when key missing', function () {
     $experiment = new Experiment($client, 'test-exp');
 
     $receivedInput = 'not-null';
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
 
     $experiment->run(
         [['expected' => 'some-value']], // No 'input' key
         function ($input) use (&$receivedInput) {
             $receivedInput = $input;
+
             return 'output';
         },
         [$scorer]
@@ -247,7 +254,7 @@ it('applies scorers to output', function () {
     $client = new BraintrustClient(['api_key' => 'test', 'base_url' => 'https://api.braintrust.dev']);
     $experiment = new Experiment($client, 'test-exp');
 
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
 
     $results = $experiment->run(
         [['input' => 'test', 'expected' => 'test']], // Exact match
@@ -270,7 +277,7 @@ it('creates spans with scores', function () {
     $client = new BraintrustClient(['api_key' => 'test', 'base_url' => 'https://api.braintrust.dev']);
     $experiment = new Experiment($client, 'test-exp');
 
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
 
     $results = $experiment->run(
         [['input' => 'test', 'expected' => 'mismatch']], // No match
@@ -294,13 +301,14 @@ it('creates spans with metrics', function () {
     $client = new BraintrustClient(['api_key' => 'test', 'base_url' => 'https://api.braintrust.dev']);
     $experiment = new Experiment($client, 'test-exp');
 
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
 
     $results = $experiment->run(
         [['input' => 'test', 'expected' => 'test']],
         function ($input) {
             // Add small delay to ensure measurable duration
             usleep(1000); // 1ms delay
+
             return $input;
         },
         [$scorer]
@@ -326,14 +334,15 @@ it('inserts each span to api', function () {
         'https://api.braintrust.dev/v1/experiment/exp-123/insert' => function ($request) use (&$insertCallCount, &$capturedBodies) {
             $insertCallCount++;
             $capturedBodies[] = $request->data();
+
             return Http::response([], 200);
-        }
+        },
     ]);
 
     $client = new BraintrustClient(['api_key' => 'test', 'base_url' => 'https://api.braintrust.dev']);
     $experiment = new Experiment($client, 'test-exp');
 
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
 
     $experiment->run(
         [
@@ -358,7 +367,7 @@ it('returns spans in results', function () {
     $client = new BraintrustClient(['api_key' => 'test', 'base_url' => 'https://api.braintrust.dev']);
     $experiment = new Experiment($client, 'test-exp');
 
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
 
     $results = $experiment->run(
         [
@@ -372,7 +381,7 @@ it('returns spans in results', function () {
 
     expect($results['spans'])->toBeArray()
         ->and($results['spans'])->toHaveCount(3)
-        ->and($results['spans'][0])->toBeInstanceOf(\EvelynLabs\Braintrust\Span::class);
+        ->and($results['spans'][0])->toBeInstanceOf(Span::class);
 });
 
 it('returns aggregates in results', function () {
@@ -384,7 +393,7 @@ it('returns aggregates in results', function () {
     $client = new BraintrustClient(['api_key' => 'test', 'base_url' => 'https://api.braintrust.dev']);
     $experiment = new Experiment($client, 'test-exp');
 
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
 
     $results = $experiment->run(
         [['input' => 'test', 'expected' => 'test']],
@@ -405,7 +414,7 @@ it('calculates correct averages', function () {
     $client = new BraintrustClient(['api_key' => 'test', 'base_url' => 'https://api.braintrust.dev']);
     $experiment = new Experiment($client, 'test-exp');
 
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
 
     // 2 exact matches (score = 1.0) and 1 mismatch (score = 0.0)
     $results = $experiment->run(
@@ -431,7 +440,7 @@ it('counts rows per scorer', function () {
     $client = new BraintrustClient(['api_key' => 'test', 'base_url' => 'https://api.braintrust.dev']);
     $experiment = new Experiment($client, 'test-exp');
 
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
 
     $results = $experiment->run(
         [
@@ -459,7 +468,7 @@ it('auto creates experiment if not created', function () {
 
     // Don't call createOrResume first
 
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
 
     $results = $experiment->run(
         [['input' => 'test', 'expected' => 'test']],
@@ -483,7 +492,7 @@ it('preserves experiment id if already created', function () {
     // Create the experiment first
     $firstId = $experiment->createOrResume();
 
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
 
     $experiment->run(
         [['input' => 'test', 'expected' => 'test']],
@@ -514,12 +523,13 @@ it('handles empty dataset', function () {
     $experiment = new Experiment($client, 'test-exp');
 
     $taskCalled = false;
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
 
     $results = $experiment->run(
         [], // Empty dataset
         function ($input) use (&$taskCalled) {
             $taskCalled = true;
+
             return $input;
         },
         [$scorer]
@@ -539,7 +549,7 @@ it('continues when task returns null', function () {
     $client = new BraintrustClient(['api_key' => 'test', 'base_url' => 'https://api.braintrust.dev']);
     $experiment = new Experiment($client, 'test-exp');
 
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
 
     $results = $experiment->run(
         [
@@ -572,7 +582,7 @@ it('handles multiple scorers', function () {
     $secondScorer->shouldReceive('name')->andReturn('custom_scorer');
     $secondScorer->shouldReceive('score')->andReturn(0.5);
 
-    $firstScorer = new ExactMatch();
+    $firstScorer = new ExactMatch;
 
     $results = $experiment->run(
         [['input' => 'test', 'expected' => 'test']],
@@ -615,7 +625,7 @@ it('sends correct authorization header on span insert', function () {
     $client = new BraintrustClient(['api_key' => 'my-secret-key', 'base_url' => 'https://api.braintrust.dev']);
     $experiment = new Experiment($client, 'test-exp');
 
-    $scorer = new ExactMatch();
+    $scorer = new ExactMatch;
 
     $experiment->run(
         [['input' => 'test', 'expected' => 'test']],
