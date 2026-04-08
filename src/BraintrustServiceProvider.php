@@ -19,13 +19,15 @@ class BraintrustServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-braintrust')
             ->hasConfigFile()
-            ->hasCommand(EvalCommand::class);
+            ->hasCommand(EvalCommand::class)
+            ->hasInstallCommand(function ($command) {
+                $command
+                    ->publishConfigFile();
+            });
     }
 
-    public function register(): void
+    public function packageRegistered(): void
     {
-        parent::register();
-
         // Bind BraintrustClient as singleton
         $this->app->singleton(BraintrustClient::class, function ($app) {
             return new BraintrustClient(
