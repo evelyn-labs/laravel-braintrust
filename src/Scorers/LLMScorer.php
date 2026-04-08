@@ -109,12 +109,12 @@ class LLMScorer implements ScoreContract
      */
     protected function parseScore(string $response): float
     {
-        // Try to find a float number in the response
-        if (preg_match('/(\d+\.?\d*)/', $response, $matches)) {
+        // Try to find a float number in the response (supports negative numbers)
+        if (preg_match('/(-?\d+\.?\d*)/', $response, $matches)) {
             $score = (float) $matches[1];
 
-            // Normalize to 0-1 range if needed
-            if ($score > 1.0 && $score <= 100.0) {
+            // Normalize to 0-1 range if needed (treat values > 10 as percentages)
+            if ($score > 10.0 && $score <= 100.0) {
                 $score = $score / 100.0;
             }
 
